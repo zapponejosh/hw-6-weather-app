@@ -1,0 +1,78 @@
+
+body {
+    margin: 15px 5%;
+}
+
+.grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: 200px auto 1fr;
+    grid-template-areas: 
+        "header header"
+        "search current"
+        "search forecast";
+}
+
+/* Rounding corders for cards */
+header, section, aside, .tile {
+    border-radius: 10px;
+}
+
+/* Header styles */
+header {
+    grid-area: header;
+    width: 100%;
+    margin-top: 10px;
+    background-color: darkblue;
+    color: aliceblue;
+    text-align: center;
+    padding: 30px;
+}
+
+
+/* Current weather card styles */
+#current-weather {
+    padding: 15px;
+    grid-area: current;
+    background-color: rgb(193, 223, 233);
+}
+
+.selected-location {
+    font-size: 3.5rem;
+}
+
+
+/* Forecast card styles */
+#forecast {
+    grid-area: forecast;
+    padding: 15px;
+    background-color: rgb(193, 223, 233);
+}
+
+.forecast-container {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 200px;
+    justify-content: start;
+}
+
+.tile {
+    /* border-radius: 10px; */
+    margin: 10px 15px;
+    padding: 25px;
+    background-color: rgb(66, 191, 240);
+    /* width: 200px;
+    height: 300px; */
+}
+
+/* Search card styles */
+#search {
+    padding: 20px 20px;
+    grid-area: search;
+    background-color: gainsboro;
+}
+
+#recent-searches button {
+    text-align: left;
+}
