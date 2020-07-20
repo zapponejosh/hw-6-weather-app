@@ -116,7 +116,6 @@ var theForecast = [
   },
 ];
 
-
 var recentSearches = [];
 
 var defaultLocation = "seattle";
@@ -127,31 +126,29 @@ $(document).ready(function () {
   const apiKey = "0dc8f315d2fd037983a62989954e536c";
 
   $("#search-btn").on("click keypress", function (e) {
-    if (e.which === 13 || e.type === 'click') {
-        searchLocation = $("#city-search").val();
-        if (!recentSearches.includes(searchLocation) && searchLocation) {
-            recentSearches.unshift(searchLocation);
-            var searchBtns = $("#recent-searches")
+    if (e.which === 13 || e.type === "click") {
+      searchLocation = $("#city-search").val();
+      if (!recentSearches.includes(searchLocation) && searchLocation) {
+        recentSearches.unshift(searchLocation);
+        var searchBtns = $("#recent-searches");
         recentSearches.forEach((item) => {
-            var newBtn = $("<button>")
-            newBtn.addClass("btn btn-secondary");
-            newBtn.attr("type", "button");
-            newBtn.text(item)
+          var newBtn = $("<button>");
+          newBtn.addClass("btn btn-secondary");
+          newBtn.attr("type", "button");
+          newBtn.text(item);
 
-            searchBtns.append(newBtn)
-        }  
-        )
-        }
-        console.log(searchLocation);
-        console.log(recentSearches)
-        
-        weatherStuff(searchLocation);
+          searchBtns.append(newBtn);
+        });
+      }
+      console.log(searchLocation);
+      console.log(recentSearches);
+
+      weatherStuff(searchLocation);
     }
-
   });
 
   function weatherStuff(location) {
-      theWeather.location = location;
+    theWeather.location = location;
     var query = location; // Text from search or default or current
     var queryURL =
       "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -190,7 +187,7 @@ $(document).ready(function () {
         console.log(theWeather);
 
         // Set html with values
-        wLocation.text(theWeather.location)
+        wLocation.text(theWeather.location);
         wTemp.text(theWeather.temp);
         wHumidity.text(theWeather.humidity);
         wIcon.attr("src", theWeather.iconURL);
@@ -201,59 +198,4 @@ $(document).ready(function () {
   }
 
   weatherStuff(defaultLocation);
-
-  //   function getCurrentWeather() {
-  //     $.ajax({
-  //       url: queryURL,
-  //       method: "GET",
-  //     }).then(function (response) {
-  //       var weatherData = response;
-  //   console.log(weatherData);
-  //   theWeather.temp = weatherData.main.temp;
-  //   theWeather.windSpeed = weatherData.wind.speed;
-  //   theWeather.humidity = weatherData.main.humidity;
-  //   theWeather.description = weatherData.weather[0].description;
-  //   var icon = weatherData.weather[0].icon;
-  //   theWeather.iconURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
-
-  //   var lat = weatherData.coord.lat;
-  //   console.log(lat)
-  //   var lon = weatherData.coord.lon;
-  //   console.log(lon)
-  // var UVurl = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon +  "&appid=" + apiKey;
-  // console.log(UVurl);
-
-  //       getUVI(UVurl);
-  //     });
-  //   }
-  //   $.ajax({
-  //     url: "https://api.openweathermap.org/data/2.5/uvi?lat=47.61&lon=-122.33&appid=0dc8f315d2fd037983a62989954e536c",
-  //     method: "GET",
-  //   }).then(function (response) {
-  //       console.log(response)
-  //   })
-
-  //   getUVI(UVurl)
-
-  //   function getUVI(queryURL) {
-  //     var UVIndex = "";
-  //     $.ajax({
-  //       url: queryURL,
-  //       method: "GET",
-  //     }).then(function (response) {
-  //       theWeather.uvi = response.value;
-  //       console.log(response);
-  //       console.log(theWeather);
-  //     });
-  //     return UVIndex;
-  //   }
-
-  //   $.ajax({
-  //     url: "api.openweathermap.org/data/2.5/uvi?lat=47.61&lon=-122.33&appid=0dc8f315d2fd037983a62989954e536c",
-  //     method: "GET",
-  //   }).then(function (response) {
-  //     var UVI = response;
-  //     // console.log(url)
-  //     console.log(UVI);
-  //   })
 });
