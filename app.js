@@ -116,34 +116,29 @@ var theForecast = [
   },
 ];
 
-var recentSearches = [];
+var recentSearches = ["Current Location"];
 
 var defaultLocation = "seattle";
-
-var searchLocation = "";
 
 $(document).ready(function () {
   const apiKey = "0dc8f315d2fd037983a62989954e536c";
 
-  $("#search-btn").on("click keypress", function (e) {
-    if (e.which === 13 || e.type === "click") {
-      searchLocation = $("#city-search").val();
-      if (!recentSearches.includes(searchLocation) && searchLocation) {
-        recentSearches.unshift(searchLocation);
-        var searchBtns = $("#recent-searches");
-        recentSearches.forEach((item) => {
-          var newBtn = $("<button>");
-          newBtn.addClass("btn btn-secondary");
-          newBtn.attr("type", "button");
-          newBtn.text(item);
+  var searchLocation = "";
 
-          searchBtns.append(newBtn);
-        });
-      }
-      console.log(searchLocation);
-      console.log(recentSearches);
+  $("#search-btn").on("click", function () {
+    $(".failure-text").css("display", "none")
 
-      weatherStuff(searchLocation);
+    searchLocation = $("#city-search").val();
+    $("#city-search").val("");
+    console.log(searchLocation);
+    console.log(recentSearches);
+
+    weatherStuff(searchLocation);
+  });
+
+  $("#city-search").on("keypress", function (e) {
+    if (e.which == 13) {
+      $("#search-btn").click();
     }
   });
 
@@ -194,8 +189,41 @@ $(document).ready(function () {
         wWind.text(theWeather.windSpeed);
         wUVI.text(theWeather.uvi);
       });
-    });
+    })
+      .done(function () {
+        console.log("found");
+        searchList();
+      })
+      .fail(function () {
+          if (searchLocation) {
+            $(".failure-text").text("Could not find " + searchLocation);
+            $(".failure-text").css("display", "block")
+          } else {
+            $(".failure-text").text("Please enter a location");
+            $(".failure-text").css("display", "block")
+          }
+        
+        failure = true;
+        console.log("Failure to search");
+      });
   }
 
   weatherStuff(defaultLocation);
+
+  function searchList() {
+    if (!recentSearches.includes(searchLocation) && searchLocation) {
+      recentSearches.unshift(searchLocation);
+      var searchBtns = $("#recent-searches");
+      searchBtns.empty();
+      
+      recentSearches.forEach((item) => {
+        var newBtn = $("<button>");
+        newBtn.addClass("btn btn-secondary");
+        newBtn.attr("type", "button");
+        newBtn.text(item);
+
+        searchBtns.append(newBtn);
+      });
+    }
+  }
 });

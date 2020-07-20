@@ -41,6 +41,8 @@ header {
 .selected-location {
     font-size: 3.5rem;
     text-transform: capitalize;
+    display: inline;
+    vertical-align: middle;
 }
 
 
@@ -80,4 +82,10 @@ header {
 
 #recent-searches button {
     text-align: left;
+}
+
+.failure-text {
+    display: none;
+    font-style: italic;
+    color: red;
 }
