@@ -7,7 +7,7 @@ body {
     display: grid;
     gap: 30px;
     grid-template-columns: 1fr 4fr;
-    grid-template-rows: 200px auto 1fr;
+    grid-template-rows: auto auto 1fr;
     grid-template-areas: 
         "header header"
         "search current"
@@ -28,6 +28,7 @@ header {
     color: aliceblue;
     text-align: center;
     padding: 30px;
+    height: fit-content;
 }
 
 
@@ -43,6 +44,11 @@ header {
     text-transform: capitalize;
     display: inline;
     vertical-align: middle;
+}
+
+.uv-index {
+    padding: 5px;
+    border-radius: .25rem;
 }
 
 
@@ -83,6 +89,7 @@ header {
 
 #recent-searches button {
     text-align: left;
+    text-transform: capitalize;
 }
 
 #current-btn {
@@ -92,8 +99,43 @@ header {
     
 }
 
+#city-search {
+    width: 75%;
+    margin-right: 3px;
+}
+
+#search-btn {
+    margin: .5rem 0;
+    borde
+}
+
 .info-text {
     display: none;
     font-style: italic;
     color: red;
+}
+
+
+/* A couple media queries to help the layout on smaller screens */
+@media (max-width: 1000px) {
+    .grid {
+        gap: 20px;
+    }
+    #recent-searches {
+        width: 90%;
+    }
+}
+
+@media (max-width: 400px) {
+    .grid {
+        gap: 10px;
+    }
+    /* Rounding corders for cards */
+    header, section, aside, .tile {
+        border-radius: 10px;
+    }
+    body {
+        margin: 5px 1%;
+    }
+
 }
