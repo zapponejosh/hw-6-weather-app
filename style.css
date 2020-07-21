@@ -101,13 +101,9 @@ header {
 
 #city-search {
     width: 75%;
-    margin-right: 3px;
+    border: 2px solid #6c757d;
 }
 
-#search-btn {
-    margin: .5rem 0;
-    borde
-}
 
 .info-text {
     display: none;
@@ -130,10 +126,7 @@ header {
     .grid {
         gap: 10px;
     }
-    /* Rounding corders for cards */
-    header, section, aside, .tile {
-        border-radius: 10px;
-    }
+
     body {
         margin: 5px 1%;
     }
