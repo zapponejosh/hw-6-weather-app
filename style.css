@@ -80,8 +80,16 @@ header {
     width: 80%;
 }
 
+
 #recent-searches button {
     text-align: left;
+}
+
+#current-btn {
+    width: 80%;
+    text-align: left;
+    margin: 1rem 0;
+    
 }
 
 .failure-text {

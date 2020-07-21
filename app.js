@@ -116,7 +116,7 @@ var theForecast = [
   },
 ];
 
-var recentSearches = ["Current Location"];
+var recentSearches = [];
 
 var defaultLocation = "seattle";
 
@@ -130,8 +130,8 @@ $(document).ready(function () {
 
     searchLocation = $("#city-search").val();
     $("#city-search").val("");
-    console.log(searchLocation);
-    console.log(recentSearches);
+    // console.log(searchLocation);
+    // console.log(recentSearches);
 
     weatherStuff(searchLocation);
   });
@@ -144,6 +144,8 @@ $(document).ready(function () {
 
   function weatherStuff(location) {
     theWeather.location = location;
+    var lat = "";
+    var lon = "";
     var query = location; // Text from search or default or current
     var queryURL =
       "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -152,9 +154,11 @@ $(document).ready(function () {
       apiKey +
       "&units=imperial";
     var UVurl = "";
+    var forecastURL = "";
+    
     $.get(queryURL, function (weatherData) {
-      console.log(weatherData);
-      theWeather.temp = weatherData.main.temp;
+    //   console.log(weatherData);
+      theWeather.temp = Math.round(weatherData.main.temp);
       theWeather.windSpeed = weatherData.wind.speed;
       theWeather.humidity = weatherData.main.humidity;
       theWeather.description = weatherData.weather[0].description;
@@ -162,10 +166,10 @@ $(document).ready(function () {
       theWeather.iconURL =
         "http://openweathermap.org/img/wn/" + icon + "@2x.png";
 
-      var lat = weatherData.coord.lat;
-      console.log(lat);
-      var lon = weatherData.coord.lon;
-      console.log(lon);
+      lat = weatherData.coord.lat;
+    //   console.log(lat);
+      lon = weatherData.coord.lon;
+    //   console.log(lon);
       UVurl =
         "https://api.openweathermap.org/data/2.5/uvi?lat=" +
         lat +
@@ -173,13 +177,15 @@ $(document).ready(function () {
         lon +
         "&appid=" +
         apiKey;
-      console.log(UVurl);
+    //   console.log(UVurl);
+      
+      forecastURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon="+ lon + "&exclude=hourly,minutely&appid=" + apiKey + "&units=imperial"
 
       //   get UV index
       $.get(UVurl, function (UVdata) {
         theWeather.uvi = UVdata.value;
-        console.log(UVdata);
-        console.log(theWeather);
+        // console.log(UVdata);
+        // console.log(theWeather);
 
         // Set html with values
         wLocation.text(theWeather.location);
@@ -188,6 +194,42 @@ $(document).ready(function () {
         wIcon.attr("src", theWeather.iconURL);
         wWind.text(theWeather.windSpeed);
         wUVI.text(theWeather.uvi);
+
+        $.get(forecastURL, function(forecastData) {
+            console.log(forecastData)
+            for (var i = 0; i < 5; i++) {
+                var day = forecastData.daily[i+1];
+                console.log(day)
+                var num = i; // had to use num instead of 
+                var date = moment.unix(day.dt).format("MM/DD")
+                console.log(theForecast[num])
+                theForecast[i]["date"] = date;
+                theForecast[i]["temp"] = Math.round(day.temp.day);
+                theForecast[i]["humidity"] = day.humidity;
+                var iconID = day.weather[0].icon;
+                var iconURL = "http://openweathermap.org/img/wn/" + iconID + "@2x.png";
+                theForecast[i]["icon"] = iconURL;
+                console.log(theForecast) // returns object
+            }
+
+            var forecastTile = $(".tile");
+            forecastTile.each(function (i, element) {
+                console.log(element)
+                $(element).find(".date").text(theForecast[i].date)
+                $(element).find(".future-temp").text(theForecast[i].temp)
+                $(element).find(".future-humidity").text(theForecast[i].humidity)
+                $(element).find(".fas").css("display", "none")
+                $(element).find(".weather-icon").attr("src", theForecast[i].icon)
+            })
+            // {
+            //     day: 1,
+            //     date: "",
+            //     icon: "",
+            //     temp: "",
+            //     humidity: "",
+            //   },
+
+         })
       });
     })
       .done(function () {
