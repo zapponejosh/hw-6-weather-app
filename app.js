@@ -322,7 +322,7 @@ $(document).ready(function () {
     useCurrent = false;
     infoP.css("display", "none");
 
-    searchLocation = $("#city-search").val();
+    searchLocation = $("#city-search").val().trim();
     $("#city-search").val("");
     // console.log(searchLocation);
     // console.log(recentSearches);
