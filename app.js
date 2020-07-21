@@ -68,6 +68,10 @@ var wTemp = $(".temp");
 var wHumidity = $(".humidity");
 var wWind = $(".wind-speed");
 var wUVI = $(".uv-index");
+var infoP =$(".info-text")
+const apiKey = "0dc8f315d2fd037983a62989954e536c";
+
+
 
 var theWeather = {
   location: "",
@@ -120,13 +124,48 @@ var recentSearches = [];
 
 var defaultLocation = "seattle";
 
+
+var useCurrent = false;
+
+
+  
+
+
+
 $(document).ready(function () {
-  const apiKey = "0dc8f315d2fd037983a62989954e536c";
 
   var searchLocation = "";
+  var currentLocation = "";
+
+  function success(position) {
+    const latitude  = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    useCurrent = true;
+    currentLocation= "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon="+ longitude + "&appid=" + apiKey + "&units=imperial";
+    infoP.css("display", "none")
+    console.log(currentLocation)
+    weatherStuff(currentLocation)
+  }
+
+  function error() {
+    infoP.text('Unable to retrieve your location');
+  }
+
+  $("#current-btn").on("click", function() {
+    infoP.css("display", "block")
+    if(!navigator.geolocation) {
+        infoP.text('Geolocation is not supported by your browser');
+      } else {
+        infoP.text('Locating…');
+        navigator.geolocation.getCurrentPosition(success, error);
+      }
+  })
+
+
 
   $("#search-btn").on("click", function () {
-    $(".failure-text").css("display", "none")
+      useCurrent = false;
+    infoP.css("display", "none")
 
     searchLocation = $("#city-search").val();
     $("#city-search").val("");
@@ -143,16 +182,19 @@ $(document).ready(function () {
   });
 
   function weatherStuff(location) {
-    theWeather.location = location;
+      useCurrent ? theWeather.location = "Your Location" : theWeather.location = location;
     var lat = "";
     var lon = "";
     var query = location; // Text from search or default or current
-    var queryURL =
-      "https://api.openweathermap.org/data/2.5/weather?q=" +
-      query +
-      "&appid=" +
-      apiKey +
-      "&units=imperial";
+    var queryURL = "";
+
+    useCurrent ? queryURL = currentLocation : queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
+    query +
+    "&appid=" +
+    apiKey +
+    "&units=imperial";
+
+
     var UVurl = "";
     var forecastURL = "";
     
@@ -201,7 +243,7 @@ $(document).ready(function () {
                 var day = forecastData.daily[i+1];
                 console.log(day)
                 var num = i; // had to use num instead of 
-                var date = moment.unix(day.dt).format("MM/DD")
+                var date = moment.unix(day.dt).format("ddd, MM/DD")
                 console.log(theForecast[num])
                 theForecast[i]["date"] = date;
                 theForecast[i]["temp"] = Math.round(day.temp.day);
@@ -221,14 +263,6 @@ $(document).ready(function () {
                 $(element).find(".fas").css("display", "none")
                 $(element).find(".weather-icon").attr("src", theForecast[i].icon)
             })
-            // {
-            //     day: 1,
-            //     date: "",
-            //     icon: "",
-            //     temp: "",
-            //     humidity: "",
-            //   },
-
          })
       });
     })
@@ -238,11 +272,11 @@ $(document).ready(function () {
       })
       .fail(function () {
           if (searchLocation) {
-            $(".failure-text").text("Could not find " + searchLocation);
-            $(".failure-text").css("display", "block")
+            infoP.text("Could not find " + searchLocation);
+            infoP.css("display", "block")
           } else {
-            $(".failure-text").text("Please enter a location");
-            $(".failure-text").css("display", "block")
+            infoP.text("Please enter a location");
+            infoP.css("display", "block")
           }
         
         failure = true;

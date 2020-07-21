@@ -92,7 +92,7 @@ header {
     
 }
 
-.failure-text {
+.info-text {
     display: none;
     font-style: italic;
     color: red;
