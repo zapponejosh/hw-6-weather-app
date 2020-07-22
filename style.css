@@ -113,12 +113,15 @@ header {
 
 
 /* A couple media queries to help the layout on smaller screens */
-@media (max-width: 1000px) {
+@media (max-width: 1050px) {
     .grid {
         gap: 20px;
     }
     #recent-searches {
         width: 90%;
+    }
+    #city-search {
+        width: 50%;
     }
 }
 
