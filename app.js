@@ -218,11 +218,14 @@ $(document).ready(function () {
   if (localStorage.getItem("recentSearches")) {
     recentSearches = JSON.parse(localStorage.getItem("recentSearches"));
     makeButtons();
+    // Use most recent search if present
+    weatherStuff(recentSearches[0])
   } else {
     localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+    weatherStuff(defaultLocation);
+
   }
   // Default location on load is Seattle
-  weatherStuff(defaultLocation);
 
   $("#recent-searches").on("click", "button", function () {
     useCurrent = false;
